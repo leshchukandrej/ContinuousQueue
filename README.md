@@ -5,11 +5,17 @@ Sample of using this class is in LimitsSafetyQueueSample.cls.
 
 You can test it using developer console and firing next script:
 
-        ```sh
-        new LimitsSafetyQueueSample().insertDummyAccountsAsync(301);
-        ```
-        or 
         
-        ```sh
+```
+        new LimitsSafetyQueueSample().insertDummyAccountsAsync(301);
+```
+
+        
+        
+or 
+        
+```
         new LimitsSafetyQueueSample().deleteDummyAccountsAsync(301);
-        ```
+```
+
+        
