@@ -1,24 +1,9 @@
-# LimitsSafetyQueue
+# ContinuousQueue
         
-This class is used for creating safety for system limits Queueable classes.
-Sample of using this class is in LimitsSafetyQueueSample.cls.
+This class is used for creating queue that must processes big scope of data or makes to many callouts.
+Sample of using this class is in ContinuousQueueTest.cls.
 
-You can test it using developer console and firing next script:
-
-        
-```
-        new LimitsSafetyQueueSample().insertDummyAccountsAsync(301);
-```       
-        
-or 
-        
-```
-        new LimitsSafetyQueueSample().deleteDummyAccountsAsync(301);
-```
-
-        
-
-LimitsSafetyQueue class required override for `void processItem(QueueableItem item)`;
+ContinuousQueue class required override for `void processItem(QueueableItem item)`;
 
 If it is needed to collect/cache data before queue execution then override `void makeStartAction()`;
 

@@ -1,4 +1,4 @@
-public abstract inherited sharing class LimitsSafetyQueue implements Queueable, Database.AllowsCallouts {
+public abstract inherited sharing class ContinuousQueue implements Queueable, Database.AllowsCallouts {
 
     protected final Integer CALLOUT_SHIFT = 10;
     protected final Integer LIMIT_STOPWATCH = 100000;
@@ -6,10 +6,10 @@ public abstract inherited sharing class LimitsSafetyQueue implements Queueable, 
     protected List<Exception> exceptions;
 
     private Type queueableType;
-    private Map<String, QueueableItem> itemsToProcessByKey;
+    protected Map<String, QueueableItem> itemsToProcessByKey;
     private Stopwatch stopwatch;
 
-    public LimitsSafetyQueue(Type queueableType) {
+    public ContinuousQueue(Type queueableType) {
         this.queueableType = queueableType;
     }
 
@@ -17,7 +17,7 @@ public abstract inherited sharing class LimitsSafetyQueue implements Queueable, 
         return this.itemsToProcessByKey != null && this.itemsToProcessByKey.keySet().size() > 0;
     }
 
-    public LimitsSafetyQueue addItem(String key, QueueableItem item) {
+    public ContinuousQueue addItem(String key, QueueableItem item) {
         if (this.itemsToProcessByKey == null) {
             this.itemsToProcessByKey = new Map<String, QueueableItem>();
         }
@@ -26,7 +26,7 @@ public abstract inherited sharing class LimitsSafetyQueue implements Queueable, 
         return this;
     }
 
-    public LimitsSafetyQueue addItems(Map<String, QueueableItem> itemByString) {
+    public ContinuousQueue addItems(Map<String, QueueableItem> itemByString) {
         if (this.itemsToProcessByKey == null) {
             this.itemsToProcessByKey = new Map<String, QueueableItem>();
         }
@@ -37,9 +37,7 @@ public abstract inherited sharing class LimitsSafetyQueue implements Queueable, 
 
     public void execute(QueueableContext qc) {
 
-        if (this.itemsToProcessByKey == null) {
-            return;
-        }
+        if (!this.hasItems()) return;
 
         Set<String> processedItemKeys = new Set<String>();
 
@@ -90,7 +88,7 @@ public abstract inherited sharing class LimitsSafetyQueue implements Queueable, 
 
     protected virtual void processRemainingItems() {
         if (this.itemsToProcessByKey.values().size() > 0) {
-            LimitsSafetyQueue queueable = (LimitsSafetyQueue) this.queueableType.newInstance();
+            ContinuousQueue queueable = (ContinuousQueue) this.queueableType.newInstance();
             System.enqueueJob(queueable.addItems(this.itemsToProcessByKey));
         }
     }
